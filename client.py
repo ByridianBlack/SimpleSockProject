@@ -2,7 +2,8 @@ from email.mime import message
 import socket
 import sys
 
-
+# Define the port on which you want to connect to the server
+port = 11553
 
 
 
@@ -13,8 +14,6 @@ except socket.error as err:
     print('socket open error: {} \n'.format(err))
     exit()
         
-# Define the port on which you want to connect to the server
-port = 50007
 localhost_addr = socket.gethostbyname(socket.gethostname())
 
 # connect to the server on local machine

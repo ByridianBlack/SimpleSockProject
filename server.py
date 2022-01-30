@@ -1,7 +1,7 @@
 import socket
 import time
 
-
+port = 11553
 
 
 try:
@@ -11,7 +11,7 @@ except socket.error as err:
     print('socket open error: {}\n'.format(err))
     exit()
 
-server_binding = ('', 50007)
+server_binding = ('', port)
 ss.bind(server_binding)
 ss.listen(1)
 host = socket.gethostname()
