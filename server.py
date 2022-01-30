@@ -1,14 +1,14 @@
 import socket
 import time
 
-port = 11553
+port = 11557
 
 
 try:
     ss = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     print("[S]: Server socket created")
 except socket.error as err:
-    print('socket open error: {}\n'.format(err))
+    print('[S]: socket open error: {}\n'.format(err))
     exit()
 
 server_binding = ('', port)
@@ -18,6 +18,15 @@ host = socket.gethostname()
 print("[S]: Server host name is {}".format(host))
 localhost_ip = (socket.gethostbyname(host))
 print("[S]: Server IP address is {}".format(localhost_ip))
+
+try:
+    output = open("out-proj.txt", 'w')
+except OSError as err:
+    print('[S]: Could not open file: {}\n'.format(err))
+    exit()
+else:
+    print ("[S]: Successfully opened out-proj.txt")
+
 csockid, addr = ss.accept()
 print ("[S]: Got a connection request from a client at {}".format(addr))
 
@@ -30,25 +39,29 @@ data_buffer = ""
 buffer_iter = 0
 line_buffer = ""
 
-output = open("out-proj.txt", 'w');
 while True:
     try:
         data_buffer += csockid.recv(512).decode("utf-8")
         
-        while buffer_iter < (len(data_buffer) - 1):
+        while buffer_iter < len(data_buffer):
             atChar = data_buffer[buffer_iter]
             if atChar == '\n':
-                output.write(line_buffer.reverse())
+                # reverse the string
+                reverse = line_buffer[::-1] + '\n'
+                output.write(reverse)
+                csockid.send(reverse.encode("utf-8"))
                 line_buffer = ""
             else:
                 line_buffer += atChar
             
             buffer_iter += 1
     
-    except:
+    except Exception as err:
+        print("[S]: Encountered Error: {}\n".format(err))
         break
 
-# Close the server socket
+# close resources
+output.close()
 ss.close()
 exit()     
 
