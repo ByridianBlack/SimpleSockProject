@@ -33,7 +33,7 @@ print ("[S]: Got a connection request from a client at {}".format(addr))
 # send a intro message to the client.
 msg = "Welcome to CS 352!"
 csockid.send(msg.encode('utf-8'))
-csockid.settimeout(25)
+csockid.settimeout(5)
 
 data_buffer = ""
 buffer_iter = 0
@@ -41,7 +41,11 @@ line_buffer = ""
 
 while True:
     try:
-        data_buffer += csockid.recv(512).decode("utf-8")
+        received = csockid.recv(512).decode("utf-8")
+        if (received == ""):
+            break
+        
+        data_buffer += received
         
         while buffer_iter < len(data_buffer):
             atChar = data_buffer[buffer_iter]
@@ -63,16 +67,4 @@ while True:
 # close resources
 output.close()
 ss.close()
-exit()     
-
-'''
-while True:
-    try:
-        data_temp = csockid.recv(200).decode("utf-8")
-        with open("out-proj.txt", 'a') as NFILE:
-            NFILE.writelines(str(data_temp)[::-1])
-        csockid.send((str(data_temp)[::-1]).encode("utf-8"))
-    except socket.timeout:
-        break
-
-'''
+exit()

@@ -60,7 +60,7 @@ while True:
         break
     count+=1
 '''
-time.sleep(26)
+#time.sleep(6)
 # close the client socket
 cs.close()
 exit()
